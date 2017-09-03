@@ -5,28 +5,28 @@ from sentry.auth.providers.oauth2 import (
     OAuth2Callback, OAuth2Provider, OAuth2Login
 )
 
-from .client import GitHubApiError, GitHubClient
+from .client import GitLabApiError, GitLabClient
 from .constants import (
     AUTHORIZE_URL, ACCESS_TOKEN_URL, CLIENT_ID, CLIENT_SECRET, SCOPE
 )
 from .views import (
-    ConfirmEmail, FetchUser, SelectOrganization, GitHubConfigureView
+    ConfirmEmail, FetchUser, SelectOrganization, GitLabConfigureView
 )
 
 
-class GitHubOAuth2Provider(OAuth2Provider):
+class GitLabOAuth2Provider(OAuth2Provider):
     access_token_url = ACCESS_TOKEN_URL
     authorize_url = AUTHORIZE_URL
-    name = 'GitHub'
+    name = 'GitLab'
     client_id = CLIENT_ID
     client_secret = CLIENT_SECRET
 
     def __init__(self, org=None, **config):
-        super(GitHubOAuth2Provider, self).__init__(**config)
+        super(GitLabOAuth2Provider, self).__init__(**config)
         self.org = org
 
     def get_configure_view(self):
-        return GitHubConfigureView.as_view()
+        return GitLabConfigureView.as_view()
 
     def get_auth_pipeline(self):
         return [
@@ -78,11 +78,11 @@ class GitHubOAuth2Provider(OAuth2Provider):
         }
 
     def refresh_identity(self, auth_identity):
-        client = GitHubClient(self.client_id, self.client_secret)
+        client = GitLabClient(self.client_id, self.client_secret)
         access_token = auth_identity.data['access_token']
 
         try:
             if not client.is_org_member(access_token, self.org['id']):
                 raise IdentityNotValid
-        except GitHubApiError as e:
+        except GitLabApiError as e:
             raise IdentityNotValid(e)
