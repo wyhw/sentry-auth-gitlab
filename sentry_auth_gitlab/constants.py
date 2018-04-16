@@ -27,5 +27,5 @@ DOMAIN = getattr(settings, 'GITLAB_DOMAIN', 'api.gitlab.com')
 BASE_DOMAIN = getattr(settings, 'GITLAB_BASE_DOMAIN', 'gitlab.com')
 API_DOMAIN = getattr(settings, 'GITLAB_API_DOMAIN', DOMAIN)
 
-ACCESS_TOKEN_URL = 'https://{0}/login/oauth/access_token'.format(BASE_DOMAIN)
-AUTHORIZE_URL = 'https://{0}/login/oauth/authorize'.format(BASE_DOMAIN)
+ACCESS_TOKEN_URL = 'https://{0}/oauth/access_token'.format(BASE_DOMAIN)
+AUTHORIZE_URL = 'https://{0}/oauth/authorize'.format(BASE_DOMAIN)
