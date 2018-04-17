@@ -10,7 +10,7 @@ from .constants import (
     AUTHORIZE_URL, ACCESS_TOKEN_URL, CLIENT_ID, CLIENT_SECRET, SCOPE
 )
 from .views import (
-    FetchUser, GitLabConfigureView
+    FetchUser
 )
 
 
