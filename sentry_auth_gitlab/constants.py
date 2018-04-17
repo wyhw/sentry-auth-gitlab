@@ -19,7 +19,7 @@ ERR_NO_VERIFIED_PRIMARY_EMAIL = 'We were unable to find a verified, primary emai
 ERR_NO_SINGLE_VERIFIED_PRIMARY_EMAIL = 'We were unable to find a single verified, primary email address associated with your GitLab acount.'
 
 # we request repo as we share scopes with the other GitLab integration
-SCOPE = 'user:email,read:org'
+SCOPE = 'read_user'
 
 # deprecated please use GITLAB_API_DOMAIN and GITLAB_BASE_DOMAIN
 DOMAIN = getattr(settings, 'GITLAB_DOMAIN', 'api.gitlab.com')
