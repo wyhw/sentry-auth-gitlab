@@ -10,7 +10,7 @@ from .constants import (
     AUTHORIZE_URL, ACCESS_TOKEN_URL, CLIENT_ID, CLIENT_SECRET, SCOPE
 )
 from .views import (
-    ConfirmEmail, FetchUser, SelectOrganization, GitLabConfigureView
+    FetchUser, GitLabConfigureView
 )
 
 
@@ -20,13 +20,6 @@ class GitLabOAuth2Provider(OAuth2Provider):
     name = 'GitLab'
     client_id = CLIENT_ID
     client_secret = CLIENT_SECRET
-
-    def __init__(self, org=None, **config):
-        super(GitLabOAuth2Provider, self).__init__(**config)
-        self.org = org
-
-    def get_configure_view(self):
-        return GitLabConfigureView.as_view()
 
     def get_auth_pipeline(self):
         return [
@@ -42,30 +35,15 @@ class GitLabOAuth2Provider(OAuth2Provider):
             ),
             FetchUser(
                 client_id=self.client_id,
-                client_secret=self.client_secret,
-                org=self.org,
-            ),
-            ConfirmEmail(),
+                client_secret=self.client_secret
+            )
         ]
-
-    def get_setup_pipeline(self):
-        pipeline = self.get_auth_pipeline()
-        pipeline.append(SelectOrganization(
-            client_id=self.client_id,
-            client_secret=self.client_secret,
-        ))
-        return pipeline
 
     def get_refresh_token_url(self):
         return ACCESS_TOKEN_URL
 
     def build_config(self, state):
-        return {
-            'org': {
-                'id': state['org']['id'],
-                'name': state['org']['login'],
-            },
-        }
+        return {}
 
     def build_identity(self, state):
         data = state['data']
@@ -77,12 +55,3 @@ class GitLabOAuth2Provider(OAuth2Provider):
             'data': self.get_oauth_data(data),
         }
 
-    def refresh_identity(self, auth_identity):
-        client = GitLabClient(self.client_id, self.client_secret)
-        access_token = auth_identity.data['access_token']
-
-        try:
-            if not client.is_org_member(access_token, self.org['id']):
-                raise IdentityNotValid
-        except GitLabApiError as e:
-            raise IdentityNotValid(e)

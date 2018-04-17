@@ -26,7 +26,7 @@ class GitLabClient(object):
         }
 
         headers = {
-            'Authorization': 'token {0}'.format(access_token),
+            'Authorization': 'Bearer {0}'.format(access_token),
         }
 
         try:
@@ -40,19 +40,7 @@ class GitLabClient(object):
             raise GitLabApiError(req.content, status=req.status_code)
         return json.loads(req.content)
 
-    def get_org_list(self, access_token):
-        return self._request('/user/orgs', access_token)
-
     def get_user(self, access_token):
         return self._request('/user', access_token)
 
-    def get_user_emails(self, access_token):
-        return self._request('/user/emails', access_token)
 
-    def is_org_member(self, access_token, org_id):
-        org_list = self.get_org_list(access_token)
-        org_id = str(org_id)
-        for o in org_list:
-            if str(o['id']) == org_id:
-                return True
-        return False
