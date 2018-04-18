@@ -7,7 +7,7 @@ CLIENT_ID = getattr(settings, 'GITLAB_APP_ID', None)
 CLIENT_SECRET = getattr(settings, 'GITLAB_API_SECRET', None)
 
 # we request repo as we share scopes with the other GitLab integration
-SCOPE = 'read_user'
+SCOPE = getattr(settings, 'GITLAB_SCOPE', 'api')
 
 # deprecated please use GITLAB_API_DOMAIN and GITLAB_BASE_DOMAIN
 DOMAIN = getattr(settings, 'GITLAB_DOMAIN', 'api.gitlab.com')
