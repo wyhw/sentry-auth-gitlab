@@ -43,7 +43,12 @@ class GitLabOAuth2Provider(OAuth2Provider):
         return ACCESS_TOKEN_URL
 
     def build_config(self, state):
-        return {}
+        return {
+            'org': {
+                'id': 10432847,
+                'name': 'tuhu',
+            },
+        }
 
     def build_identity(self, state):
         data = state['data']
